@@ -14,6 +14,8 @@ config/app.php
 'providers'=> [
     // 日志
     Lin\Src\Providers\LoggerProvider::class,
+    // sql日志
+    Lin\Src\Providers\SqlQueryServiceProvider::class,
 ]
 ~~~
 
