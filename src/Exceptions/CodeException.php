@@ -8,6 +8,8 @@
 
 namespace Lin\Src\Exceptions;
 
+use Lin\Src\Support\ErrorCode;
+
 use Exception;
 
 class CodeException extends Exception
