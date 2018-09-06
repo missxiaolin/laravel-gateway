@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Lin\\Config\\": "src"
+            "Lin\\": "src"
         }
     },
     "autoload-dev": {
@@ -23,7 +23,8 @@
         ]
     },
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.0",
+        "xiaolin/enum": "^0.2.1"
     },
     "require-dev": {
         "phpunit/phpunit": ">=5.6",
