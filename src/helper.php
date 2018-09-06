@@ -65,3 +65,38 @@ if (!function_exists('logger_local')) {
         return app('logger_local')->getLogger($name)->debug($message, $context);
     }
 }
+
+if (!function_exists('api_response')) {
+
+    /**
+     * json返回
+     * @param $data
+     * @param string $code
+     * @param string $msg
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function api_response($data, $code = '0', $msg = 'ok')
+    {
+        $json = [
+            'data' => $data,
+            'code' => $code,
+            'message' => $msg,
+            'time' => (string)time(),
+            '_ut' => (string)round(microtime(TRUE) - $_SERVER['REQUEST_TIME_FLOAT'], 5),
+        ];
+
+        return response()->json($json);
+    }
+}
+
+/**
+ *
+ * @param string $errorMessage
+ * @param string $errorCode
+ * @param array $error
+ * @return json
+ */
+function response_error($errorMessage, $errorCode, $error = [])
+{
+    return api_response([], $errorCode, $errorMessage);
+}
