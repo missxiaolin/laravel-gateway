@@ -6,7 +6,7 @@
  * Time: 下午6:51
  */
 
-namespace Lin\Providers;
+namespace Lin\Src\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Events\QueryExecuted;
