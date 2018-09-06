@@ -12,6 +12,10 @@ use GuzzleHttp\Client;
 use Exception;
 use GuzzleHttp\Exception\ConnectException;
 
+/**
+ * Class Manager
+ * @package Lin\Src\Basic
+ */
 class Manager
 {
     protected $errorMessage = '网络错误，请稍后再试';

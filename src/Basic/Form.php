@@ -15,7 +15,10 @@ use Lin\Src\Support\ErrorCode;
 use Carbon\Carbon;
 use Validator;
 
-
+/**
+ * Class Form
+ * @package Lin\Src\Basic
+ */
 abstract class Form implements Arrayable
 {
     /**
