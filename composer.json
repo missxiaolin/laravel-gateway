@@ -24,7 +24,8 @@
     },
     "require": {
         "php": ">=7.0",
-        "xiaolin/enum": "^0.2.1"
+        "xiaolin/enum": "^0.2.1",
+        "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
         "phpunit/phpunit": ">=5.6",
