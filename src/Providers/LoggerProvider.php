@@ -45,6 +45,10 @@ class LoggerProvider extends ServiceProvider
             return new Local();
         });
 
+        $this->app->bind('logger_factory', function () {
+            return new Factory();
+        });
+
         $this->app->bind('logger_sql', function () {
             $monolog = new Logger('debug');
             $log_level = Logger::DEBUG;
