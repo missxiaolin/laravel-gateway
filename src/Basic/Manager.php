@@ -11,6 +11,8 @@ namespace Lin\Src\Basic;
 use GuzzleHttp\Client;
 use Exception;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\BadResponseException;
 
 /**
  * Class Manager
@@ -38,7 +40,7 @@ class Manager
 
     /**
      * 连接后端请求
-     * @param $request
+     * @param $request object
      * @param array $paramter
      * @return mixed
      * @throws Exception
@@ -104,13 +106,47 @@ class Manager
                 'errorServer' => $request->getName(),
             ];
 
-            logger_instance($this->request->getConnectLogName(), $post);
+            $this->doLogger($this->request->getConnectLogName(), $post);
 
-            throw new Exception($this->errorMessage, 500);
+            $this->stopExecution($this->errorMessage, 500);
+        } catch (BadResponseException $be) {
+
+            $post['error'] = [
+                'errorCode' => $be->getCode(),
+                'errorMessage' => $be->getMessage(),
+                'errorFile' => $be->getFile(),
+                'errorLine' => $be->getLine(),
+            ];
+            $post['prepare']['end'] = $this->getTimeNow();
+
+            app()['micro'] = [
+                'errorCode' => 'E50202',
+                'errorMessage' => '服务异常',
+                'errorServer' => $this->request->getName(),
+            ];
+            $this->doLogger($this->request->getBadLogName(), $post);
+
+            $this->stopExecution($this->errorMessage, 500);
+        } catch (ServerException $se) {
+
+            $post['error'] = [
+                'errorCode' => $se->getCode(),
+                'errorMessage' => $se->getMessage(),
+                'errorFile' => $se->getFile(),
+                'errorLine' => $se->getLine(),
+            ];
+            $post['prepare']['end'] = $this->getTimeNow();
+
+            app()['micro'] = [
+                'errorCode' => 'E50303',
+                'errorMessage' => '服务异常',
+                'errorServer' => $this->request->getName(),
+            ];
+            $this->doLogger($this->request->getServerLogName(), $post);
+
+            $this->stopExecution($this->errorMessage, 500);
 
         } catch (Exception $ex) {
-//            dd($ex->getMessage());
-
             $post['error'] = [
                 'errorCode' => $ex->getCode(),
                 'errorMessage' => $ex->getMessage(),
@@ -134,7 +170,9 @@ class Manager
 
         $post['end'] = $this->getTimeNow();
         $post['response'] = $body;
-        logger_instance($this->request->getResultSucessLogName(), $post);
+
+        $this->doLogger($this->request->getResultSucessLogName(), $post);
+        
         return $body;
     }
 
@@ -172,5 +210,26 @@ class Manager
         $time = sprintf("%04d", array_get($micro, 1, 0));
         $time = date('Y-m-d H:i:s.') . $time;
         return $time;
+    }
+
+    /**
+     * 日志记录
+     * @param $name
+     * @param $post
+     */
+    protected function doLogger($name, $post)
+    {
+        logger_instance($name, $post);
+    }
+
+    /**
+     * 停止执行
+     * @param type $message
+     * @param type $code
+     * @throws Exception
+     */
+    protected function stopExecution($message, $code = 500)
+    {
+        throw new Exception($message, $code);
     }
 }
