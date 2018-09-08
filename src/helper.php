@@ -89,6 +89,28 @@ if (!function_exists('api_response')) {
     }
 }
 
+if (!function_exists('logger_factory')) {
+
+    /**
+     * Log a debug message to the logs.
+     *
+     * @param  string $name
+     * @param  string $message
+     * @param  array $context
+     * @return \Illuminate\Contracts\Logging\Log|null
+     */
+    function logger_factory($name, $message = null, array $context = [])
+    {
+
+        if (is_null($message)) {
+            return app('logger_factory')->getLogger($name);
+        }
+
+        return app('logger_factory')->getLogger($name)->debug($message, $context);
+    }
+
+}
+
 /**
  *
  * @param string $errorMessage
