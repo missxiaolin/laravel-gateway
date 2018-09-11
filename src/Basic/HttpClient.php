@@ -16,7 +16,7 @@ use Psr\Http\Message\ResponseInterface;
  * Class Client
  * @package Lin\Basic
  */
-abstract class Client
+abstract class HttpClient
 {
     protected $guzzleClient;
 
